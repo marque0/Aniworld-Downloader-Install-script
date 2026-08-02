@@ -1,112 +1,96 @@
 # AniWorld-Downloader Auto-Setup
 
-Dieses Repository enthaelt Setup-Skripte fuer [AniWorld-Downloader](https://github.com/phoenixthrush/AniWorld-Downloader) – plattformuebergreifend fuer **Linux**, **macOS**, **WSL** und **Windows**.
-
-## Was ist das?
-
-AniWorld-Downloader ist ein Cross-Platform Tool zum Suchen, Streamen und Downloaden von Anime, Filmen, Serien und Manga. Dieses Repository macht die Installation vollautomatisch.
+Dieses Repository enthaelt Setup-Skripte fuer [AniWorld-Downloader](https://github.com/phoenixthrush/AniWorld-Downloader).
 
 ---
 
-## Windows (PowerShell)
+## Windows
 
-### 1. Skript herunterladen
+Die Windows-Installation laeuft ueber **Docker Desktop + WSL2**.
 
-```powershell
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/aniworld-setup.ps1" -OutFile "aniworld-setup.ps1"
-```
+### 1. PowerShell als Administrator oeffnen
 
-Oder die `.ps1`-Datei manuell herunterladen.
+Rechtsklick auf Start-Button → **Terminal (Administrator)** oder **PowerShell (Administrator)**.
 
-### 2. Ausfuehren
+### 2. Ausfuehrungsrichtlinie setzen (einmalig)
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+```
+
+### 3. Skript herunterladen
+
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/aniworld-setup.ps1" -OutFile "aniworld-setup.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/docker-setup.sh" -OutFile "docker-setup.sh"
+```
+
+Oder beide Dateien manuell herunterladen (muessen im selben Ordner liegen).
+
+### 4. Ausfuehren
+
+```powershell
 .\aniworld-setup.ps1
 ```
 
-> **Hinweis:** Falls `Set-ExecutionPolicy` nicht funktioniert, PowerShell als Administrator starten.
+Das Skript erledigt automatisch:
+1. Docker Desktop installieren (falls fehlend)
+2. Docker Desktop starten
+3. WSL2 aktivieren (falls fehlend)
+4. Ubuntu in WSL installieren (falls fehlend)
+5. Docker Compose Setup via `docker-setup.sh` ausfuehren
 
-### 3. Modus waehlen
-
-| Modus | Wann empfohlen |
-|-------|----------------|
-| **Docker** | Dauerhaft laufender Server/Web UI |
-| **Native Python** | Desktop/Laptop Nutzung |
-| **Beides** | Beide parallel |
-
-### 4. Ohne interaktive Abfrage
-
-```powershell
-.\aniworld-setup.ps1 -Docker     # Nur Docker
-.\aniworld-setup.ps1 -Native     # Nur Python
-.\aniworld-setup.ps1 -Both        # Beides
-```
+Danach ist die Web UI unter `http://localhost:8080` erreichbar.
 
 ---
 
-## Linux / macOS / WSL (Bash)
+## Linux / macOS / WSL
 
-### 1. Skript herunterladen
+### Docker Setup (empfohlen)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/docker-setup.sh -o docker-setup.sh
+chmod +x docker-setup.sh
+./docker-setup.sh
+```
+
+Oder fuer Native Python Installation:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/aniworld-setup.sh -o aniworld-setup.sh
 chmod +x aniworld-setup.sh
-```
-
-### 2. Ausfuehren
-
-```bash
 ./aniworld-setup.sh
 ```
 
-### 3. Ohne interaktive Abfrage
+---
 
-```bash
-./aniworld-setup.sh --docker   # Nur Docker
-./aniworld-setup.sh --native   # Nur Python
-./aniworld-setup.sh --both     # Beides
-```
+## Dateien im Repository
+
+| Datei | Zweck |
+|-------|-------|
+| `aniworld-setup.ps1` | Windows PowerShell: Docker Desktop + WSL2 + Docker Compose |
+| `docker-setup.sh` | Docker Compose Setup (plattformübergreifend via Bash) |
+| `aniworld-setup.sh` | Native Python Installation (Linux/macOS) |
 
 ---
 
 ## Nuetzliche Befehle
 
-### Native (nach Installation)
+### Docker (Linux/macOS/WSL)
 
 ```bash
-# Terminal-Menu
-aniworld
-
-# Web UI starten
-aniworld -w
-
-# Direkter Download
-aniworld --no-menu "https://aniworld.to/anime/..."
-
-# Update
-python -m pip install -U aniworld
+cd ~/aniworld-docker-setup && docker compose up -d    # Starten
+cd ~/aniworld-docker-setup && docker compose down    # Stoppen
+cd ~/aniworld-docker-setup && docker compose logs -f  # Logs ansehen
 ```
 
-### Docker
+### Native (Linux/macOS)
 
 ```bash
-# Linux/macOS
-cd ~/aniworld-docker && docker compose up -d
-
-# Windows (PowerShell)
-cd ~\aniworld-docker ; docker compose up -d
+aniworld              # Terminal-Menu
+aniworld -w           # Web UI
+aniworld --no-menu "https://aniworld.to/anime/..."   # Direkter Download
 ```
-
----
-
-## Voraussetzungen
-
-| Komponente | Windows | Linux/macOS |
-|------------|---------|-------------|
-| **Docker** | Docker Desktop | Docker Engine |
-| **Python** | 3.10+ (Store/winget) | Meist vorinstalliert |
-| **ffmpeg** | Automatisch via winget | Automatisch via Paketmanager |
 
 ---
 
