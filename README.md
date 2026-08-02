@@ -1,89 +1,117 @@
 # AniWorld-Downloader Auto-Setup
 
-Dieses Skript richtet [AniWorld-Downloader](https://github.com/phoenixthrush/AniWorld-Downloader) vollautomatisch auf Linux, macOS oder WSL ein.
+Dieses Repository enthaelt Setup-Skripte fuer [AniWorld-Downloader](https://github.com/phoenixthrush/AniWorld-Downloader) – plattformuebergreifend fuer **Linux**, **macOS**, **WSL** und **Windows**.
 
-## Voraussetzungen
+## Was ist das?
 
-- **Linux/macOS/WSL** (kein Windows direkt, aber WSL geht)
-- Internetverbindung
-- Für **Docker-Modus**: `curl` und `sudo`-Rechte
-- Für **Native-Modus**: Python 3.10+ (wird ggf. automatisch installiert)
+AniWorld-Downloader ist ein Cross-Platform Tool zum Suchen, Streamen und Downloaden von Anime, Filmen, Serien und Manga. Dieses Repository macht die Installation vollautomatisch.
 
-## Schnellstart
+---
+
+## Windows (PowerShell)
+
+### 1. Skript herunterladen
+
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/aniworld-setup.ps1" -OutFile "aniworld-setup.ps1"
+```
+
+Oder die `.ps1`-Datei manuell herunterladen.
+
+### 2. Ausfuehren
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+.\aniworld-setup.ps1
+```
+
+> **Hinweis:** Falls `Set-ExecutionPolicy` nicht funktioniert, PowerShell als Administrator starten.
+
+### 3. Modus waehlen
+
+| Modus | Wann empfohlen |
+|-------|----------------|
+| **Docker** | Dauerhaft laufender Server/Web UI |
+| **Native Python** | Desktop/Laptop Nutzung |
+| **Beides** | Beide parallel |
+
+### 4. Ohne interaktive Abfrage
+
+```powershell
+.\aniworld-setup.ps1 -Docker     # Nur Docker
+.\aniworld-setup.ps1 -Native     # Nur Python
+.\aniworld-setup.ps1 -Both        # Beides
+```
+
+---
+
+## Linux / macOS / WSL (Bash)
 
 ### 1. Skript herunterladen
 
 ```bash
-curl -fsSL https://dein-link-zum-script.sh -o aniworld-setup.sh
+curl -fsSL https://raw.githubusercontent.com/marque0/Aniworld-Downloader-Install-script/main/aniworld-setup.sh -o aniworld-setup.sh
 chmod +x aniworld-setup.sh
 ```
 
-Oder einfach die Datei `aniworld-setup.sh` in einen Ordner legen.
-
-### 2. Skript ausführen
+### 2. Ausfuehren
 
 ```bash
 ./aniworld-setup.sh
 ```
 
-### 3. Installationsmodus wählen
-
-Das Skript fragt interaktiv, wie du installieren möchtest:
-
-| Modus | Empfohlen für | Beschreibung |
-|-------|---------------|--------------|
-| **1) Docker Compose** | Server, NAS, dauerhaft laufend | Web UI sofort unter `http://localhost:8080` verfügbar |
-| **2) Native Python** | Desktop/Laptop | `aniworld` im Terminal oder `aniworld -w` für Web UI |
-| **3) Beides** | – | Beide Varianten parallel installieren |
-
-### 4. Fertig!
-
-- **Docker**: `~/aniworld-docker/start.sh` und `~/aniworld-docker/stop.sh`
-- **Native**: Einfach `aniworld` oder `aniworld -w` eingeben
-
-## Nützliche Befehle
+### 3. Ohne interaktive Abfrage
 
 ```bash
-# Terminal-Menu starten
+./aniworld-setup.sh --docker   # Nur Docker
+./aniworld-setup.sh --native   # Nur Python
+./aniworld-setup.sh --both     # Beides
+```
+
+---
+
+## Nuetzliche Befehle
+
+### Native (nach Installation)
+
+```bash
+# Terminal-Menu
 aniworld
 
-# Web UI starten (nur Native)
+# Web UI starten
 aniworld -w
 
-# Direkter Download (nur Native)
+# Direkter Download
 aniworld --no-menu "https://aniworld.to/anime/..."
 
-# Docker: Container stoppen
-cd ~/aniworld-docker && docker compose down
-
-# Docker: Container updaten
-cd ~/aniworld-docker && docker compose pull && docker compose up -d
+# Update
+python -m pip install -U aniworld
 ```
 
-## Automatisch ohne interaktive Abfrage
+### Docker
 
 ```bash
-# Nur Docker
-./aniworld-setup.sh --docker
+# Linux/macOS
+cd ~/aniworld-docker && docker compose up -d
 
-# Nur Native
-./aniworld-setup.sh --native
-
-# Beides
-./aniworld-setup.sh --both
+# Windows (PowerShell)
+cd ~\aniworld-docker ; docker compose up -d
 ```
 
-## Was installiert das Skript?
+---
 
-- `ffmpeg` (für Downloads)
-- `git` und `curl`
-- Python 3 + pip (falls noch nicht vorhanden)
-- **Docker Compose** Setup in `~/aniworld-docker/`
-- **ODER** das `aniworld` Python-Paket via pip
+## Voraussetzungen
+
+| Komponente | Windows | Linux/macOS |
+|------------|---------|-------------|
+| **Docker** | Docker Desktop | Docker Engine |
+| **Python** | 3.10+ (Store/winget) | Meist vorinstalliert |
+| **ffmpeg** | Automatisch via winget | Automatisch via Paketmanager |
+
+---
 
 ## Support
 
-Bei Problemen:
-- [Dokumentation](https://www.phoenixthrush.com/AniWorld-Downloader-Docs/)
+- [Offizielle Dokumentation](https://www.phoenixthrush.com/AniWorld-Downloader-Docs/)
 - [GitHub Issues](https://github.com/phoenixthrush/AniWorld-Downloader/issues)
 - [Discord](https://discord.gg/BfDvrKd8V5)
